@@ -17,9 +17,9 @@ $ npm install maukirim-whatsapp-sdk
 4. Use your API
 
 ```javascript
-import {useWhatsapp} from "maukirim-whatsapp-sdk";
+import {UseWhatsapp} from 'maukirim-whatsapp-sdk';
 
-const whatsapp = useWhatsapp({
+const whatsapp = UseWhatsapp({
     token: "xxxxxxxxxxxxxxxxxxxxxx",
 });
 
