@@ -1,16 +1,28 @@
 {
   "name": "maukirim-whatsapp-sdk",
   "description": "MauKirim Official WhatsApp SDK Client",
-  "author": "MauKirim",
+  "author": "MauKirim <info@maukirim.com>",
   "keywords": [
     "react",
     "components",
     "whatsapp",
     "maukirim"
   ],
+  "main": "dist/js/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/js/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:MauKirim/WhatsappAPI-SDK.git"
+  },
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -26,10 +38,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build:lib": "yarn build:babel && yarn build:types && node ./scripts/copyts.js",
+    "build:babel": "concurrently \"yarn build:babel:esm && yarn build:babel:umd\" \"yarn build:babel:cjs\"",
+    "build:babel:cjs": "cross-env BABEL_ENV=cjs babel --source-maps --extensions \".js,.ts,.tsx\" src/lib --out-dir dist/js --presets=@babel/env",
+    "build:babel:esm": "cross-env BABEL_ENV=esm babel --source-maps --extensions \".js,.ts,.tsx\" src/lib --out-dir dist/esm",
+    "build:babel:umd": "cross-env BABEL_ENV=umd babel --source-maps --extensions \".js\" dist/esm --out-dir dist/umd --plugins=transform-es2015-modules-umd",
+    "build:types": "tsc -p tsconfig.gen-dts.json",
+    "clean": "rm -rf dist",
+    "dev": "yarn build:types && yarn build:babel:esm --skip-initial-build --watch --verbose"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +66,26 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.13.1",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-export-default-from": "^7.10.4",
+    "@babel/plugin-transform-typescript": "^7.13.0",
+    "@babel/preset-env": "^7.13.0",
+    "@babel/preset-react": "^7.12.13",
+    "@types/node": "^16.18.11",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-plugin-typescript-to-proptypes": "^1.3.2",
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "fs-extra": "^9.1.0",
+    "typescript": "^4.9.4",
     "prettier": "^2.8.1"
+  },
+  "bugs": {
+    "url": "https://github.com/MauKirim/WhatsappAPI-SDK/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   }
 }
